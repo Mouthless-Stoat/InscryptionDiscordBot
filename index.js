@@ -3,6 +3,9 @@ const { BroadManager } = require("./fightCommandDeps/broadManager")
 const { getCardByName, getCardByPortrait, blankID, genCardEmbed, findCardInList, getCardById } = require("./fightCommandDeps/cardLib")
 const { Player, loadDeck, genDeckEmbed, objToDeckString } = require("./fightCommandDeps/playerClass")
 const fs = require("fs")
+
+require("dotenv").config()
+
 //const config = require("./config.json")
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms))

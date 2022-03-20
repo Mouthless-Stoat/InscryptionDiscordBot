@@ -1,4 +1,5 @@
 const { BroadManager } = require("./broadManager")
+const emojiUnicode = require("emoji-unicode")
 
 let cardPool = []
 const blankID = 0
@@ -253,8 +254,7 @@ class Card {
             if (this.name in idBank) {
                 this.id = idBank[this.name]
             } else {
-                idCounter++
-                this.id = idCounter
+                this.id = `${emojiUnicode(this.portrait).slice(-3)}`
                 idBank[this.name] = this.id
             }
         }
