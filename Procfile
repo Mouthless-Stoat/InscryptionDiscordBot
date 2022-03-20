@@ -1,0 +1,1 @@
+worker: node setupCommand.js && node index.js
