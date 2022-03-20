@@ -111,13 +111,13 @@ client.on("interactionCreate", async (interaction) => {
 
         let tempFile
         try {
-            tempFile = fs.readFileSync(`./playerDatabase/${interaction.user.id}.json`, { encoding: 'utf8', flag: 'r' })
+            tempFile = fs.readFileSync(`./database/${interaction.user.id}.json`, { encoding: 'utf8', flag: 'r' })
         } catch {
             interaction.editReply(`<@${interaction.user.id}> Don't yet have a profile you need one to battle`)
             return
         }
 
-        const p1File = `./playerDatabase/${interaction.user.id}.json`
+        const p1File = `./database/${interaction.user.id}.json`
         const p1Json = JSON.parse(tempFile)
 
         let tempDeck = loadDeck(p1Json.decks[p1Json.deckIndex])
@@ -134,13 +134,13 @@ client.on("interactionCreate", async (interaction) => {
         //p2
 
         try {
-            tempFile = fs.readFileSync(`./playerDatabase/${p2User.id}.json`, { encoding: 'utf8', flag: 'r' })
+            tempFile = fs.readFileSync(`./database/${p2User.id}.json`, { encoding: 'utf8', flag: 'r' })
         } catch {
             interaction.editReply(`<@${p2User.id}> Don't yet have a profile you need one to battle`)
             return
         }
 
-        const p2File = `./playerDatabase/${p2User.id}.json`
+        const p2File = `./database/${p2User.id}.json`
         const p2Json = JSON.parse(tempFile)
 
         tempDeck = loadDeck(p2Json.decks[p2Json.deckIndex])
@@ -409,7 +409,7 @@ client.on("interactionCreate", async (interaction) => {
 
                 console.log("Card To Place:")
                 console.log(cardToPlace)
-                
+
                 const sacCols = []
                 let flag = false
 
@@ -603,8 +603,8 @@ client.on("interactionCreate", async (interaction) => {
             var user = options.getUser("user") ? options.getUser("user") : interaction.user
             var userExist = false
 
-            fs.watchFile(`./playerDatabase/${user.id}.json`, () => { }) // check for changes then update it
-            fs.readdirSync("./playerDatabase").forEach(file => {
+            fs.watchFile(`./database/${user.id}.json`, () => { }) // check for changes then update it
+            fs.readdirSync("./database").forEach(file => {
                 if (file.endsWith(".json") && file.startsWith(user.id)) {
                     userExist = true
                 }
@@ -618,7 +618,7 @@ client.on("interactionCreate", async (interaction) => {
                 return
             }
 
-            const dataFile = fs.readFileSync(`./playerDatabase/${user.id}.json`, { encoding: 'utf8', flag: 'r' })
+            const dataFile = fs.readFileSync(`./database/${user.id}.json`, { encoding: 'utf8', flag: 'r' })
             const playerData = JSON.parse(dataFile)
 
             let deckStr = playerData.decks[playerData.deckIndex]
@@ -639,10 +639,10 @@ client.on("interactionCreate", async (interaction) => {
         else if (options.getSubcommand() == "load") {
             const slot = options.getInteger("slot")
             const deckStr = options.getString("deck_string")
-            const path = `./playerDatabase/${interaction.user.id}.json`
+            const path = `./database/${interaction.user.id}.json`
 
             fs.watchFile(path, () => { }) // check for changes then update it
-            fs.readdirSync("./playerDatabase").forEach(file => {
+            fs.readdirSync("./database").forEach(file => {
                 if (file.endsWith(".json") && file.startsWith(interaction.user.id)) {
                     userExist = true
                 }
@@ -756,8 +756,8 @@ client.on("interactionCreate", async (interaction) => {
         var user = options.getUser("user") ? options.getUser("user") : interaction.user
         var userExist = false
 
-        fs.watchFile(`./playerDatabase/${user.id}.json`, () => { }) // check for changes then update it
-        fs.readdirSync("./playerDatabase").forEach(file => {
+        fs.watchFile(`./database/${user.id}.json`, () => { }) // check for changes then update it
+        fs.readdirSync("./database").forEach(file => {
             if (file.endsWith(".json") && file.startsWith(user.id)) {
                 userExist = true
             }
@@ -779,14 +779,14 @@ client.on("interactionCreate", async (interaction) => {
                         ""
                     ]
                 }
-                fs.writeFileSync(`./playerDatabase/${user.id}.json`, JSON.stringify(temp))
+                fs.writeFileSync(`./database/${user.id}.json`, JSON.stringify(temp))
             } else {
                 await interaction.followUp("Error ❗: This user don't have a profile")
                 return
             }
         }
 
-        let temp = fs.readFileSync(`./playerDatabase/${user.id}.json`, { encoding: 'utf8', flag: 'r' })
+        let temp = fs.readFileSync(`./database/${user.id}.json`, { encoding: 'utf8', flag: 'r' })
 
         const playerData = JSON.parse(temp)
         interaction.reply({
