@@ -1,9 +1,9 @@
 const { Client, Intents, MessageActionRow, MessageButton, MessageEmbed } = require("discord.js")
-const config = require("./config.json")
 const { BroadManager } = require("./fightCommandDeps/broadManager")
 const { getCardByName, getCardByPortrait, blankID, genCardEmbed, findCardInList, getCardById } = require("./fightCommandDeps/cardLib")
 const { Player, loadDeck, genDeckEmbed, objToDeckString } = require("./fightCommandDeps/playerClass")
 const fs = require("fs")
+//const config = require("./config.json")
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms))
 
