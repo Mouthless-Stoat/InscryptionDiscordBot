@@ -820,4 +820,4 @@ client.on("interactionCreate", async (interaction) => {
 })
 
 
-client.login("OTMyNjEwNzYwOTAxNzkxNzU0.YeVfdA.p6wNaFSojn-FS1w8horxSocIyM4")
+client.login(process.env.token)
