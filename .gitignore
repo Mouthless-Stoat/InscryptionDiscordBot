@@ -1,6 +1,5 @@
 node_modules
-config.json
 other
 .vscode
 .env
-.gitignore
+database
