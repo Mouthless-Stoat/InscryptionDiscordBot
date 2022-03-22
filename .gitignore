@@ -3,3 +3,4 @@ config.json
 other
 .vscode
 .env
+.gitignore

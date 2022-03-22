@@ -46,7 +46,6 @@ const poison = new Ability(
         if (!opposingCard.sigilList.filter(sigil => sigil.name == "Poison Immunity").length > 0) { opposingCard.die() }
     }
 )
-
 //#endregion
 
 
@@ -123,18 +122,6 @@ const powerBuff = new Ability(
         })
     }
 )
-
-const buff = new Ability(
-    "onTurnEnd",
-    "Buffer",
-    "This card buff the health and power of it neighboring card at the end of the owner turn",
-    (broadManager, col, selfCard, selfRow, opposingCard, opposeRow) => {
-        const neighboringCard = broadManager.getNeighboringCard(col, selfRow)
-        neighboringCard.forEach(card => {
-            if (card.id != blankID) card.buff(1, 1)
-        })
-    }
-)
 //#endregion
 
 
@@ -148,6 +135,14 @@ const spiky = new Ability(
     }
 )
 
+const panic = new Ability(
+    "onTalkingDamage",
+    "Panic",
+    "This card attack the opposing card upon talking damage",
+    (broadManager, col, selfCard, selfRow, opposingCard, opposeRow) => {
+        opposingCard.damage(selfCard.power)
+    }
+)
 //#endregion
 
 
@@ -218,6 +213,27 @@ const markiplierFav = new Ability(
     }
 )
 
+const NollReedFav = new Ability(
+    "onPlace",
+    "Noll Reed Favorite",
+    'If the owner name is "Noll Reed" this card gain 3 additional attack',
+    (broadManager, col, selfCard, selfRow, opposingCard, opposeRow) => {
+        if (broadManager.currentPlayer.user.username.toLowerCase().includes("noll reed")) {
+            selfCard.buff(0, 3)
+        }
+    }
+)
+
+const totemMaker = new Ability(
+    "onPlace",
+    "Totem Maker",
+    "This card will give the owner a random totem when place",
+    (broadManager, col, selfCard, selfRow, opposingCard, opposeRow) => {
+        const totemList = [buffTotem, HealingTotem, powerTotem]
+        broadManager.currentPlayer.giveCard(totemList[Math.floor(Math.random() * totemList.length)])
+    }
+)
+
 //#endregion
 
 
@@ -228,6 +244,15 @@ const explosion = new Ability(
     "If this card die the opposing card die as well",
     (broadManager, col, selfCard, selfRow, opposingCard, opposeRow) => {
         opposingCard.die()
+    }
+)
+
+const scaleFate = new Ability(
+    "onDead",
+    "Scale Fate",
+    "This card fate is link to the scale, if it die the owner lost the game",
+    (broadManager, col, selfCard, selfRow, opposingCard, opposeRow) => {
+        broadManager.addScale(-10)
     }
 )
 
@@ -254,7 +279,7 @@ class Card {
             if (this.name in idBank) {
                 this.id = idBank[this.name]
             } else {
-                this.id = `${emojiUnicode(this.portrait).slice(-3)}`
+                this.id = `${this.name.slice(0, 1)}${this.name.slice(-1)}${this.name.length}${this.power}${this.health}`
                 idBank[this.name] = this.id
             }
         }
@@ -359,7 +384,6 @@ function genCardEmbed(card = new Card) {
         color: "PURPLE",
         title: `${card.name} | ID: ${card.id}`,
         description:
-            `Card Name 🏷️: **${card.name}**\n` +
             `Card Portrait 🖼️: **${card.portrait}**\n` +
             `${card.bloodCost > 0 ? `Card Blood Cost 🩸: **${card.bloodCost}**\n` : ""}${card.boneCost > 0 ? `Card Bone Cost 🦴: **${card.boneCost}**\n` : ""}` +
             `Power 🔪: **${card.power}**\n` +
@@ -433,16 +457,18 @@ const HealingTotem = new Card("Healing Totem", "💞", 2, 0, 0, 3, [healthBuff])
 
 const powerTotem = new Card("Power Totem", "🦾", 0, 6, 0, 3, [powerBuff])
 
-const buffTotem = new Card("Buff Totem", "⏫", 2, 6, 0, 6, [buff])
+const buffTotem = new Card("Buff Totem", "⏫", 2, 6, 0, 6, [healthBuff, powerBuff])
 
 //---- ON TALKING DAMAGE ----
 const blowfish = new Card("Blowfish", "🐡", 0, 4, 1, 2, [spiky])
 const hedgehog = new Card("Hedgehog", "🦔", 1, 0, 1, 2, [spiky])
 const cactus = new Card("Cactus", "🌵", 0, 4, 0, 4, [spiky])
 
+const scaredCat = new Card("Scared Cat", "🐈", 2, 2, 2, 2, [panic])
+
 //---- ON KILL ----
-const blankHole = new Card("Black Hole", "⚫", 2, 2, 1, 1, [absorption])
-const shark = new Card("Shark", "🦈", 0, 10, 2, 2, [absorption])
+const blankHole = new Card("Black Hole", "⚫", 2, 1, 1, 1, [absorption])
+const shark = new Card("Shark", "🦈", 0, 8, 2, 2, [absorption])
 const dragon = new Card("Dragon", "🐲", 2, 4, 2, 2, [absorption])
 
 const anaconda = new Card("Anaconda", "🐍", 2, 0, 1, 3, [devourer])
@@ -459,12 +485,18 @@ const shamrock = new Card("Shamrock", "☘️", 0, 2, 1, 1, [badLuck], clover)
 const lion = new Card("Lion", "🦁", 3, 0, 3, 3, [pride])
 const wolf = new Card("Wolf", "🐺", 2, 0, 2, 2, [pride])
 
-const flyingUrayuli = new Card("THE FLYING URAYULI", "🪶", 4, 8, 4, 4, [flying, markiplierFav])
+const flyingUrayuli = new Card("THE FLYING URAYULI", "🪶", 4, 4, 4, 4, [flying, markiplierFav])
+
+const rat = new Card("Rat with a Gun", "🐀", 2, 0, 1, 1, [NollReedFav])
 
 const warren = new Card("Warren", "🕳️", 1, 0, 0, 3, [rabbitHole])
 
+const woodCarver = new Card("Wood Carver", "🔪", 2, 0, 1, 1, [totemMaker])
+
 //---- ON DEAD ---- 
 const bomb = new Card("Bomb", "💣", 2, 0, 0, 1, [explosion])
+
+const scale = new Card("The Scale", "⚖️", 3, 0, 5, 2, [scaleFate])
 
 
 //#endregion

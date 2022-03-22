@@ -817,12 +817,7 @@ client.on("interactionCreate", async (interaction) => {
             ]
         })
     }
-
-    else if (commandName == "test") {
-        // const ayy = client.emojis.cache.find(emoji => emoji.name === "IMG_20210818_205332")
-        // interaction.reply(`${ayy} LMAO`)
-    }
 })
 
 
-client.login(process.env.token)
+client.login("OTMyNjEwNzYwOTAxNzkxNzU0.YeVfdA.p6wNaFSojn-FS1w8horxSocIyM4")
