@@ -645,9 +645,9 @@ client.on("interactionCreate", async (interaction) => {
                     ephemeral: true
                 })
                 return
-            }   
+            }
             const path = serverDatabase.getUserProfilePath(interaction.user.id)
-            
+
             const dataFile = fs.readFileSync(path, { encoding: 'utf8', flag: 'r' })
             const playerData = JSON.parse(dataFile)
 
@@ -728,7 +728,7 @@ client.on("interactionCreate", async (interaction) => {
     else if (commandName == "lookup") {
         const card =
             (options.getSubcommand() == "name") ? getCardByName(options.getString("name")) :
-                (options.getSubcommand() == "id") ? getCardById(options.getInteger("id")) :
+                (options.getSubcommand() == "id") ? getCardById(options.getString("id")) :
                     getCardByPortrait(options.getString("portrait"))
 
         if (card == "error") {

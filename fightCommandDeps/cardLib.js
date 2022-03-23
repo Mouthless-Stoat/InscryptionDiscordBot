@@ -399,7 +399,7 @@ function getCardByPortrait(portrait = "") {
 function getCardById(id = 0) {
     let out = "error"
     cardPool.forEach((card) => {
-        if (card.id == id) {
+        if (card.id.toLowerCase() == id.toLocaleLowerCase()) {
             out = new Card(
                 {
                     name: card.name,
