@@ -61,8 +61,7 @@ client.once("ready", () => {
 client.on("interactionCreate", async (interaction) => {
     if (!interaction.isCommand()) return
     const { commandName, options } = interaction
-
-    const serverDatabase = new Database()
+    const database = new Database()
 
     if (commandName == "fight") {
         //#region getting p2 acceptant
@@ -609,7 +608,7 @@ client.on("interactionCreate", async (interaction) => {
             const user = options.getUser("user") ? options.getUser("user") : interaction.user
             var userExist = false
 
-            if (!serverDatabase.userExist(user.id)) {
+            if (!database.userExist(user.id)) {
                 await interaction.reply({
                     content: "Error ❗: This user don't have a profile yet.",
                     ephemeral: true
@@ -617,7 +616,7 @@ client.on("interactionCreate", async (interaction) => {
                 return
             }
 
-            const dataFile = fs.readFileSync(serverDatabase.getUserProfilePath(user.id), { encoding: 'utf8', flag: 'r' })
+            const dataFile = fs.readFileSync(database.getUserProfilePath(user.id), { encoding: 'utf8', flag: 'r' })
             const playerData = JSON.parse(dataFile)
 
             let deckStr = playerData.decks[playerData.deckIndex]
@@ -639,14 +638,14 @@ client.on("interactionCreate", async (interaction) => {
             const slot = options.getInteger("slot")
             const deckStr = options.getString("deck_string")
 
-            if (!serverDatabase.userExist(interaction.user.id)) {
+            if (!database.userExist(interaction.user.id)) {
                 await interaction.reply({
                     content: "Error ❗: This user don't have a profile yet.",
                     ephemeral: true
                 })
                 return
             }
-            const path = serverDatabase.getUserProfilePath(interaction.user.id)
+            const path = database.getUserProfilePath(interaction.user.id)
 
             const dataFile = fs.readFileSync(path, { encoding: 'utf8', flag: 'r' })
             const playerData = JSON.parse(dataFile)
@@ -746,31 +745,21 @@ client.on("interactionCreate", async (interaction) => {
 
     else if (commandName == "profile") {
         var user = options.getUser("user") ? options.getUser("user") : interaction.user
+        console.log(user.id)
 
-        if (!serverDatabase.userExist(user.id)) {
+        if (!database.userExist(user.id)) {
             if (user == interaction.user) {
-                let temp = {
-                    name: user.username,
-                    sacMade: 0,
-                    misplay: 0,
-                    matchFight: 0,
-                    win: 0,
-                    loss: 0,
-                    deckIndex: 0,
-                    decks: [
-                        "",
-                        "",
-                        ""
-                    ]
-                }
-                fs.writeFileSync(`./database/${user.id}.json`, JSON.stringify(temp))
+                database.createProfile(user.id)
             } else {
-                await interaction.followUp("Error ❗: This user don't have a profile")
+                await interaction.reply({
+                    content: "Error ❗: This user don't have a profile",
+                    ephemeral: true
+                })
                 return
             }
         }
 
-        let temp = fs.readFileSync(serverDatabase.getUserProfilePath(user.id), { encoding: 'utf8', flag: 'r' })
+        let temp = fs.readFileSync(database.getUserProfilePath(user.id), { encoding: 'utf8', flag: 'r' })
 
         const playerData = JSON.parse(temp)
         interaction.reply({
