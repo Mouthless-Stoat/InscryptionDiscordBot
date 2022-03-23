@@ -276,33 +276,51 @@ function getSigilByName(name = "") {
 
 let idBank = {}
 class Card {
-    constructor (name = "", portrait = "", bloodCost = 0, boneCost = 0, power = 0, health = 1, sigilList = [], transformCard = null, id = -1) {
+    constructor ({
+        name,
+        portrait,
+        description = "",
+        bloodCost = 0,
+        boneCost = 0,
+        power = 0,
+        health = 1,
+        sigilList = [],
+        transformCard = null,
+        id = -1
+    }) {
         this.name = name
         this.portrait = portrait
+        this.description = description
+
         this.bloodCost = bloodCost
         this.boneCost = boneCost
+
         this.power = power
         this.health = health
+
         this.sigilList = sigilList
         this.sigilListName = []
+
         sigilList.forEach(sigil => {
             this.sigilListName.push(sigil.name)
         })
+
         this.transformCard = transformCard
 
 
-        if (id != -1) {
+        if (id == 0) {
             this.id = id
         } else {
             if (this.name in idBank) {
                 this.id = idBank[this.name]
             } else {
+                // make id follow this format
+                // [first letter of name][last letter of name][name length][card power][card]
                 this.id = `${this.name.slice(0, 1)}${this.name.slice(-1)}${this.name.length}${this.power}${this.health}`
                 idBank[this.name] = this.id
+                cardPool.push(this)
             }
         }
-
-        if (this.name in idBank) { cardPool.push(this) }
     }
 
     die() {
@@ -330,20 +348,25 @@ class Card {
     }
 }
 
+//#region Function 
+
 function getCardByName(name = "") {
     let out = "error"
     cardPool.forEach((card) => {
         if (card.name.toLowerCase() == name.toLocaleLowerCase()) {
             out = new Card(
-                card.name,
-                card.portrait,
-                card.bloodCost,
-                card.boneCost,
-                card.power,
-                card.health,
-                card.sigilList,
-                card.transformCard,
-                card.id
+                {
+                    name: card.name,
+                    portrait: card.portrait,
+                    description: card.description,
+                    bloodCost: card.bloodCost,
+                    boneCost: card.boneCost,
+                    power: card.power,
+                    health: card.health,
+                    sigilList: card.sigilList,
+                    transformCard: card.transformCard,
+                    id: card.id
+                }
             )
         }
     })
@@ -355,15 +378,18 @@ function getCardByPortrait(portrait = "") {
     cardPool.forEach((card) => {
         if (card.portrait == portrait) {
             out = new Card(
-                card.name,
-                card.portrait,
-                card.bloodCost,
-                card.boneCost,
-                card.power,
-                card.health,
-                card.sigilList,
-                card.transformCard,
-                card.id
+                {
+                    name: card.name,
+                    portrait: card.portrait,
+                    description: card.description,
+                    bloodCost: card.bloodCost,
+                    boneCost: card.boneCost,
+                    power: card.power,
+                    health: card.health,
+                    sigilList: card.sigilList,
+                    transformCard: card.transformCard,
+                    id: card.id
+                }
             )
         }
     })
@@ -375,15 +401,18 @@ function getCardById(id = 0) {
     cardPool.forEach((card) => {
         if (card.id == id) {
             out = new Card(
-                card.name,
-                card.portrait,
-                card.bloodCost,
-                card.boneCost,
-                card.power,
-                card.health,
-                card.sigilList,
-                card.transformCard,
-                card.id
+                {
+                    name: card.name,
+                    portrait: card.portrait,
+                    description: card.description,
+                    bloodCost: card.bloodCost,
+                    boneCost: card.boneCost,
+                    power: card.power,
+                    health: card.health,
+                    sigilList: card.sigilList,
+                    transformCard: card.transformCard,
+                    id: card.id
+                }
             )
         }
     })
@@ -394,19 +423,20 @@ function genCardEmbed(card = new Card) {
     let out = ""
 
     card.sigilList.forEach((sigil) => {
-        out += `Sigil Name 🏷️: **${sigil.name}**\n` +
-            `Description ℹ️: **${sigil.description}**\n\n`
+        out += `**Sigil Name 🏷️: ${sigil.name}**\n` +
+            `**Description ℹ️: ${sigil.description}**\n\n`
     })
 
     return {
         color: "PURPLE",
         title: `${card.name} | ID: ${card.id}`,
         description:
-            `Card Portrait 🖼️: **${card.portrait}**\n` +
-            `${card.bloodCost > 0 ? `Card Blood Cost 🩸: **${card.bloodCost}**\n` : ""}${card.boneCost > 0 ? `Card Bone Cost 🦴: **${card.boneCost}**\n` : ""}` +
-            `Power 🔪: **${card.power}**\n` +
-            `Health ❤️: **${card.health}**\n\n` +
-            `Sigil ✨:\n` +
+            card.description + "\n\n" +
+            `**Card Portrait 🖼️: ${card.portrait}**\n` +
+            `${card.bloodCost > 0 ? `**Card Blood Cost 🩸: ${card.bloodCost}**\n` : ""}${card.boneCost > 0 ? `**Card Bone Cost 🦴: ${card.boneCost}**\n` : ""}` +
+            `**Power 🔪: ${card.power}**\n` +
+            `**Health ❤️: ${card.health}**\n\n` +
+            `**Sigil ✨:**\n` +
             out
 
     }
@@ -424,7 +454,15 @@ function findCardInList(cardToFind = new Card, list = []) {
     return out
 }
 
-const blank = () => { return new Card("", "🔳", 0, 0, 0, 0, [], 0, 0) }
+//#endregion
+
+const blank = () => {
+    return new Card({
+        name: "",
+        portrait: "🔳",
+        id: 0
+    })
+}
 
 fs.readdir("./database/card", (err, files) => {
     console.log("Loading Cards!")
@@ -438,14 +476,18 @@ fs.readdir("./database/card", (err, files) => {
         })
 
         new Card(
-            cardData.name,
-            cardData.portrait,
-            cardData.bloodCost,
-            cardData.boneCost,
-            cardData.power,
-            cardData.health,
-            sigilList,
-            cardData.transformCard
+            {
+                name: cardData.name,
+                portrait: cardData.portrait,
+                description: cardData.description,
+                bloodCost: cardData.bloodCost,
+                boneCost: cardData.boneCost,
+                power: cardData.power,
+                health: cardData.health,
+                sigilList: sigilList,
+                transformCard: cardData.transformCard,
+                id: cardData.id
+            }
         )
     })
 

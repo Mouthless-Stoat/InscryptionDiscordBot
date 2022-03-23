@@ -1,1 +1,1 @@
-{"name":"Bee","portrait":"🐝","bloodCost":0,"boneCost":1,"power":1,"health":1,"sigilList":["Airborne"],"transfromCard":null,"id":"Be311"}
+{"name":"Bee","portrait":"🐝","description":"A squirrel that can fly.","bloodCost":0,"boneCost":2,"power":1,"health":1,"sigilList":["Airborne"],"transfromCard":null,"id":"Be311"}
