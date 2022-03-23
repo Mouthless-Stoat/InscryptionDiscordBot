@@ -3,6 +3,7 @@ const { BroadManager } = require("./fightCommandDeps/broadManager")
 const { getCardByName, getCardByPortrait, blankID, genCardEmbed, findCardInList, getCardById } = require("./fightCommandDeps/cardLib")
 const { Player, loadDeck, genDeckEmbed, objToDeckString } = require("./fightCommandDeps/playerClass")
 const fs = require("fs")
+const { Database } = require("./fightCommandDeps/database")
 
 require("dotenv").config()
 
@@ -60,6 +61,8 @@ client.once("ready", () => {
 client.on("interactionCreate", async (interaction) => {
     if (!interaction.isCommand()) return
     const { commandName, options } = interaction
+
+    const serverDatabase = new Database()
 
     if (commandName == "fight") {
         //#region getting p2 acceptant
@@ -603,17 +606,10 @@ client.on("interactionCreate", async (interaction) => {
 
     else if (commandName == "deck") {
         if (options.getSubcommand() == "see") {
-            var user = options.getUser("user") ? options.getUser("user") : interaction.user
+            const user = options.getUser("user") ? options.getUser("user") : interaction.user
             var userExist = false
 
-            fs.watchFile(`./database/${user.id}.json`, () => { }) // check for changes then update it
-            fs.readdirSync("./database").forEach(file => {
-                if (file.endsWith(".json") && file.startsWith(user.id)) {
-                    userExist = true
-                }
-            }) // check if the user have a profile already
-
-            if (!userExist) {
+            if (!serverDatabase.userExist(user.id)) {
                 await interaction.reply({
                     content: "Error ❗: This user don't have a profile yet.",
                     ephemeral: true
@@ -621,7 +617,7 @@ client.on("interactionCreate", async (interaction) => {
                 return
             }
 
-            const dataFile = fs.readFileSync(`./database/${user.id}.json`, { encoding: 'utf8', flag: 'r' })
+            const dataFile = fs.readFileSync(serverDatabase.getUserProfilePath(user.id), { encoding: 'utf8', flag: 'r' })
             const playerData = JSON.parse(dataFile)
 
             let deckStr = playerData.decks[playerData.deckIndex]
@@ -642,22 +638,15 @@ client.on("interactionCreate", async (interaction) => {
         else if (options.getSubcommand() == "load") {
             const slot = options.getInteger("slot")
             const deckStr = options.getString("deck_string")
-            const path = `./database/${interaction.user.id}.json`
 
-            fs.watchFile(path, () => { }) // check for changes then update it
-            fs.readdirSync("./database").forEach(file => {
-                if (file.endsWith(".json") && file.startsWith(interaction.user.id)) {
-                    userExist = true
-                }
-            }) // check if the user have a profile already
-
-            if (!userExist) {
+            if (!serverDatabase.userExist(interaction.user.id)) {
                 await interaction.reply({
                     content: "Error ❗: This user don't have a profile yet.",
                     ephemeral: true
                 })
                 return
             }
+            const path = serverDatabase.getUserProfilePath(interaction.user.id)
 
             const dataFile = fs.readFileSync(path, { encoding: 'utf8', flag: 'r' })
             const playerData = JSON.parse(dataFile)
@@ -739,7 +728,7 @@ client.on("interactionCreate", async (interaction) => {
     else if (commandName == "lookup") {
         const card =
             (options.getSubcommand() == "name") ? getCardByName(options.getString("name")) :
-                (options.getSubcommand() == "id") ? getCardById(options.getInteger("id")) :
+                (options.getSubcommand() == "id") ? getCardById(options.getString("id")) :
                     getCardByPortrait(options.getString("portrait"))
 
         if (card == "error") {
@@ -757,16 +746,8 @@ client.on("interactionCreate", async (interaction) => {
 
     else if (commandName == "profile") {
         var user = options.getUser("user") ? options.getUser("user") : interaction.user
-        var userExist = false
 
-        fs.watchFile(`./database/${user.id}.json`, () => { }) // check for changes then update it
-        fs.readdirSync("./database").forEach(file => {
-            if (file.endsWith(".json") && file.startsWith(user.id)) {
-                userExist = true
-            }
-        }) // test if the user have a profile already
-
-        if (!userExist) {
+        if (!serverDatabase.userExist(user.id)) {
             if (user == interaction.user) {
                 let temp = {
                     name: user.username,
@@ -789,7 +770,7 @@ client.on("interactionCreate", async (interaction) => {
             }
         }
 
-        let temp = fs.readFileSync(`./database/${user.id}.json`, { encoding: 'utf8', flag: 'r' })
+        let temp = fs.readFileSync(serverDatabase.getUserProfilePath(user.id), { encoding: 'utf8', flag: 'r' })
 
         const playerData = JSON.parse(temp)
         interaction.reply({
@@ -816,11 +797,6 @@ client.on("interactionCreate", async (interaction) => {
                     )
             ]
         })
-    }
-
-    else if (commandName == "test") {
-        // const ayy = client.emojis.cache.find(emoji => emoji.name === "IMG_20210818_205332")
-        // interaction.reply(`${ayy} LMAO`)
     }
 })
 

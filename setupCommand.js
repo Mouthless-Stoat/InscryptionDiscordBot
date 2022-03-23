@@ -1,6 +1,8 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const { REST } = require('@discordjs/rest')
 const { Routes } = require('discord-api-types/v9')
+require("dotenv").config()
+
 //const { clientId, guildId, token } = require('./config.json')
 
 const testCommands = [
@@ -42,7 +44,7 @@ const commands = [
         .addSubcommand(sub =>
             sub.setName("id")
                 .setDescription("Help you look up card by ID!")
-                .addIntegerOption(option =>
+                .addStringOption(option =>
                     option.setName("id")
                         .setDescription("The id you want to look up")
                         .setRequired(true)
@@ -104,7 +106,7 @@ const rest = new REST({ version: '9' }).setToken(process.env.token);
         )
 
         await rest.put(
-            Routes.applicationGuildCommands(process.env.clientId, process.env.guildId),
+            Routes.applicationGuildCommands(process.env.clientId, process.env.testGuildId),
             { body: testCommands },
         )
 

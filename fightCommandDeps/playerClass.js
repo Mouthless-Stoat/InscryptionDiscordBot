@@ -34,7 +34,7 @@ function loadDeck(deckString = "") {
 
         temp.forEach(i => {
             const count = parseInt(i.substring(0, 2))
-            const id = parseInt(i.substring(2, i.length))
+            const id = i.substring(2, i.length)
             const card = getCardById(id)
             for (let i = 0; i < count; i++) {
                 out.push(card)
