@@ -131,6 +131,17 @@ const powerBuff = new Sigil(
         })
     }
 )
+
+const mimic = new Sigil(
+    "onTurnEnd",
+    "Mimic",
+    "This card will mimic the opposing card at the end of the owner turn",
+    (broadManager, col, selfCard, selfRow, opposingCard, opposeRow) => {
+        selfCard.transform(opposingCard)
+        selfCard.gainSigil(mimic)
+    }
+)
+
 //#endregion
 
 
@@ -240,15 +251,6 @@ const totemMaker = new Sigil(
     (broadManager, col, selfCard, selfRow, opposingCard, opposeRow) => {
         const totemList = [buffTotem, HealingTotem, powerTotem]
         broadManager.currentPlayer.giveCard(totemList[Math.floor(Math.random() * totemList.length)])
-    }
-)
-
-const mimic = new Sigil(
-    "onPlace",
-    "Mimic",
-    "This card will transform into the opposing card when place",
-    (broadManager, col, selfCard, selfRow, opposingCard, opposeRow) => {
-        selfCard.transform(opposingCard)
     }
 )
 
@@ -483,27 +485,6 @@ const blank = () => {
         id: 0
     })
 }
-
-new Card({
-    name: "Ram",
-    portrait: "🐏",
-    description: "A wild Ram. It toss it enemy into the air.",
-    bloodCost: 3,
-    power: 2,
-    health: 3,
-    sigilList: [ ram ]
-})
-
-new Card({
-    name: "AMB V2",
-    portrait: "🧪",
-    description: "How did it escape the lap?",
-    bloodCost: 2,
-    boneCost: 2,
-    power: 2,
-    health: 2,
-    sigilList: [ mimic ]
-})
 
 fs.readdir("./database/card", (err, files) => {
     console.log("Loading Cards!")
