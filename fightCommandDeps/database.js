@@ -44,6 +44,8 @@ class Database {
         return out
     }
 }
+
+// make a database folder if one doesn't exist
 try {
     fs.readdirSync("./database/player")
 } catch {
