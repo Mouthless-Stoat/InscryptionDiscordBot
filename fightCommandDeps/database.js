@@ -1,9 +1,9 @@
 const fs = require("fs")
 
 class Database {
-    createProfile(user) {
+    createProfile(userID) {
         fs.writeFileSync(
-            `./database/player/${user.id}.json`,
+            `./database/player/${user}.json`,
             JSON.stringify({
                 sacMade: 0,
                 misplay: 0,

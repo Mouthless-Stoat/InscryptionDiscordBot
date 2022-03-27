@@ -749,21 +749,7 @@ client.on("interactionCreate", async (interaction) => {
 
         if (!serverDatabase.userExist(user.id)) {
             if (user == interaction.user) {
-                let temp = {
-                    name: user.username,
-                    sacMade: 0,
-                    misplay: 0,
-                    matchFight: 0,
-                    win: 0,
-                    loss: 0,
-                    deckIndex: 0,
-                    decks: [
-                        "",
-                        "",
-                        ""
-                    ]
-                }
-                fs.writeFileSync(`./database/${user.id}.json`, JSON.stringify(temp))
+                serverDatabase.createProfile(userID)
             } else {
                 await interaction.followUp("Error ❗: This user don't have a profile")
                 return
