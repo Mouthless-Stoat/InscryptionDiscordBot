@@ -3,7 +3,7 @@ const fs = require("fs")
 class Database {
     createProfile(userID) {
         fs.writeFileSync(
-            `./database/player/${user}.json`,
+            `./database/player/${userID}.json`,
             JSON.stringify({
                 sacMade: 0,
                 misplay: 0,
