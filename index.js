@@ -749,7 +749,7 @@ client.on("interactionCreate", async (interaction) => {
 
         if (!serverDatabase.userExist(user.id)) {
             if (user == interaction.user) {
-                serverDatabase.createProfile(userID)
+                serverDatabase.createProfile(user.id)
             } else {
                 await interaction.followUp("Error ❗: This user don't have a profile")
                 return
