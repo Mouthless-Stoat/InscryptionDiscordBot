@@ -2,3 +2,4 @@ node_modules
 other
 .vscode
 .env
+database\player\

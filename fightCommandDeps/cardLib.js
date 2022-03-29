@@ -32,7 +32,11 @@ const flying = new Sigil(
     "This card flying over the opposing card and attack directly to the scale.",
     (broadManager, col, selfCard, selfRow, opposingCard, opposeRow) => {
         const flag = opposingCard.sigilList.filter(sigil => sigil.name == "Fly Blocker").length > 0
-        if (flag) { opposingCard.damage(selfCard.power) } else { broadManager.addScale(selfCard.power) }
+        if (flag) {
+            opposingCard.damage(selfCard.power)
+        } else {
+            broadManager.addScale(selfCard.power)
+        }
     }
 )
 
@@ -43,16 +47,6 @@ const poison = new Sigil(
     "This card kill the opposing card if it directly attack that card.",
     (broadManager, col, selfCard, selfRow, opposingCard, opposeRow) => {
         if (!opposingCard.sigilList.filter(sigil => sigil.name == "Poison Immunity").length > 0) { opposingCard.die() }
-    }
-)
-
-const ram = new Sigil(
-    "onAttack",
-    "Ram",
-    "This card will ram the opposing card back to the opposing player hand.",
-    (broadManager, col, selfCard, selfRow, opposingCard, opposeRow) => {
-        opposingCard.die()
-        broadManager.opposingPlayer.giveCard(opposingCard)
     }
 )
 //#endregion
@@ -131,17 +125,6 @@ const powerBuff = new Sigil(
         })
     }
 )
-
-const mimic = new Sigil(
-    "onTurnEnd",
-    "Mimic",
-    "This card will mimic the opposing card at the end of the owner turn",
-    (broadManager, col, selfCard, selfRow, opposingCard, opposeRow) => {
-        selfCard.transform(opposingCard)
-        selfCard.gainSigil(mimic)
-    }
-)
-
 //#endregion
 
 
@@ -362,11 +345,6 @@ class Card {
         this.health = card.health
         this.sigilList = card.sigilList
         this.id = card.id
-    }
-
-    gainSigil(sigil = new Sigil) {
-        this.sigilList.push(sigil)
-        this.sigilListName.push(sigil.name)
     }
 }
 

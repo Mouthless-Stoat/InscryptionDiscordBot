@@ -32,18 +32,29 @@ function loadDeck(deckString = "") {
         let temp = deckString.split("/")
         let out = []
 
-        temp.forEach(i => {
+        for (const i in temp) {
+            // get the card id and count
             const count = parseInt(i.substring(0, 2))
             const id = i.substring(2, i.length)
+
+            // get the card
             const card = getCardById(id)
+
+
+            if (card == "error") {
+                return "error"
+            }
+
+            // push the card to the output if not error
             for (let i = 0; i < count; i++) {
                 out.push(card)
             }
-        })
+        }
 
         if (out.length > 30) {
             return "error"
         }
+        
         return out
     } catch {
         return "error"
