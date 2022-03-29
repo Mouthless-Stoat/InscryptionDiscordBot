@@ -661,67 +661,32 @@ client.on("interactionCreate", async (interaction) => {
             })
         }
 
-        else if (options.getSubcommand() == "build") {
-            const deckMessage = await interaction.reply({
-                embeds: [new MessageEmbed()
-                    .setTitle("test")
-                    .setDescription("test")
-                ],
-                fetchReply: true
-            })
-
-            const channel = interaction.channel
-            const filter = (m) => m.author.id == interaction.user.id
-
-            let msgContent = ""
-
-            let isAdding = true
-            let isRunning = true
-            let deckObj = { "1": 15 }
-            let deckStr
-            while (isRunning) {
-                deckStr = objToDeckString(deckObj)
-
-                let embed = genDeckEmbed(deckStr, interaction.user)
-
-                await deckMessage.edit({
-                    embeds: [embed]
+        else if (options.getSubcommand() == "select") {
+            if (!serverDatabase.userExist(interaction.user.id)) {
+                await interaction.reply({
+                    content: "Error ❗: This user don't have a profile yet.",
+                    ephemeral: true
                 })
-
-                await channel.awaitMessages({ filter, max: 1, time: 60000, errors: ["time"] })
-                    .then(collected => {
-                        const msg = collected.first()
-                        msgContent = msg.content
-                        msg.delete()
-                    })
-                    .catch(async collected => {
-                        await interaction.followUp("done")
-                        isRunning = false
-                    })
-
-                if (msgContent == "quit") {
-                    interaction.editReply("done")
-                    break
-                }
-
-                const card = getCardById(parseInt(msgContent))
-
-                if (card == "error") {
-                    await interaction.followUp({
-                        content: "Error ❗: This card ID doesn't exist",
-                        ephemeral: true
-                    })
-                    continue
-                }
-
-                if (isAdding) {
-                    if (!(msgContent in deckObj)) {
-                        deckObj[msgContent] = 0
-                    }
-                    deckObj[msgContent]++
-                }
+                return
             }
 
+            const path = serverDatabase.getUserProfilePath(interaction.user.id)
+            const slot = options.getInteger("slot")
+
+            const dataFile = fs.readFileSync(path, { encoding: 'utf8', flag: 'r' })
+            const playerData = JSON.parse(dataFile)
+
+            //change playerData deckIndex
+            playerData.deckIndex = slot
+
+            // write to file
+            fs.writeFileSync(path, JSON.stringify(playerData))
+
+            // send user a confirm message
+            await interaction.reply({
+                content: `Deck ${slot + 1} Selected!`,
+                ephemeral: true
+            })
         }
     }
 

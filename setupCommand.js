@@ -6,7 +6,50 @@ require("dotenv").config()
 //const { clientId, guildId, token } = require('./config.json')
 
 const testCommands = [
-
+    new SlashCommandBuilder()
+        .setName("deck")
+        .setDescription("Show your deck or other player deck")
+        .addSubcommand(sub =>
+            sub.setName("see")
+                .setDescription("See your or someone else deck")
+                .addUserOption(option =>
+                    option.setName("user")
+                        .setDescription("The user you want to see deck of")
+                )
+        )
+        .addSubcommand(sub =>
+            sub.setName("load")
+                .setDescription("Load in a deck using a deck string")
+                .addStringOption(option =>
+                    option.setName("deck_string")
+                        .setDescription("The deck string you want to load in")
+                        .setRequired(true)
+                )
+                .addIntegerOption(option =>
+                    option.setName("slot")
+                        .setDescription("The slot you want to load this deck in")
+                        .addChoices([
+                            ["Slot 1", 0],
+                            ["Slot 2", 1],
+                            ["Slot 3", 2]
+                        ])
+                        .setRequired(true)
+                )
+    )
+        .addSubcommand(sub =>
+            sub.setName("select")
+                .setDescription("Select What deck you want to use")
+                .addIntegerOption(option =>
+                    option.setName("slot")
+                        .setDescription("The slot you want to select")
+                        .addChoices([
+                            ["Slot 1", 0],
+                            ["Slot 2", 1],
+                            ["Slot 3", 2]
+                        ])
+                        .setRequired(true)
+                )
+        )
 ].map(command => command.toJSON())
 
 
@@ -59,37 +102,6 @@ const commands = [
                         .setRequired(true)
                 )
         ),
-
-    new SlashCommandBuilder()
-        .setName("deck")
-        .setDescription("Show your deck or other player deck")
-        .addSubcommand(sub =>
-            sub.setName("see")
-                .setDescription("See your or someone else deck")
-                .addUserOption(option =>
-                    option.setName("user")
-                        .setDescription("The user you want to see deck of")
-                )
-        )
-        .addSubcommand(sub =>
-            sub.setName("load")
-                .setDescription("Load in a deck using a deck string")
-                .addStringOption(option =>
-                    option.setName("deck_string")
-                        .setDescription("The deck string you want to load in")
-                        .setRequired(true)
-                )
-                .addIntegerOption(option =>
-                    option.setName("slot")
-                        .setDescription("The slot you want to load this deck in")
-                        .addChoices([
-                            ["Slot 1", 0],
-                            ["Slot 2", 1],
-                            ["Slot 3", 2]
-                        ])
-                        .setRequired(true)
-                )
-        )
 
 ].map(command => command.toJSON())
 

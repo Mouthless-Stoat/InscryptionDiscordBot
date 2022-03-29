@@ -21,27 +21,20 @@ class Database {
     }
 
     userExist(userID) {
-        var userExist = false
-        // find player json file in the database
-        fs.watchFile(`./database/player/${userID}.json`, () => { })
-        fs.readdirSync("./database/player").forEach(file => {
-            if (file.endsWith(".json") && file.startsWith(userID)) {
-                userExist = true
-            }
-        })
-
-        return userExist
+        try {
+            fs.readFileSync(`./database/player/${userID}.json`)
+            return true
+        } catch (e) {
+            return false
+        }
     }
 
     getUserProfilePath(userID) {
-        let out = ""
-        fs.watchFile(`./database/player/${userID}.json`, () => { })
-        fs.readdirSync("./database/player").forEach(file => {
-            if (file.endsWith(".json") && file.startsWith(userID)) {
-                out = `./database/player/${userID}.json`
-            }
-        })
-        return out
+        // if user doesn't exist throw error
+        if (!this.userExist(userID)) {
+            throw new Error("User doesn't exist")
+        }
+        return `./database/player/${userID}.json`
     }
 }
 
