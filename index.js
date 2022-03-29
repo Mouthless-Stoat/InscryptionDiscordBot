@@ -1,7 +1,7 @@
 const { Client, Intents, MessageActionRow, MessageButton, MessageEmbed } = require("discord.js")
 const { BroadManager } = require("./fightCommandDeps/broadManager")
 const { getCardByName, getCardByPortrait, blankID, genCardEmbed, findCardInList, getCardById } = require("./fightCommandDeps/cardLib")
-const { Player, loadDeck, genDeckEmbed, objToDeckString } = require("./fightCommandDeps/playerClass")
+const { Player, loadDeck, genDeckEmbed } = require("./fightCommandDeps/playerClass")
 const fs = require("fs")
 const { Database } = require("./fightCommandDeps/database")
 
