@@ -660,34 +660,6 @@ client.on("interactionCreate", async (interaction) => {
                 ephemeral: true
             })
         }
-
-        else if (options.getSubcommand() == "select") {
-            if (!serverDatabase.userExist(interaction.user.id)) {
-                await interaction.reply({
-                    content: "Error ❗: This user don't have a profile yet.",
-                    ephemeral: true
-                })
-                return
-            }
-
-            const path = serverDatabase.getUserProfilePath(interaction.user.id)
-            const slot = options.getInteger("slot")
-
-            const dataFile = fs.readFileSync(path, { encoding: 'utf8', flag: 'r' })
-            const playerData = JSON.parse(dataFile)
-
-            //change playerData deckIndex
-            playerData.deckIndex = slot
-
-            // write to file
-            fs.writeFileSync(path, JSON.stringify(playerData))
-
-            // send user a confirm message
-            await interaction.reply({
-                content: `Deck ${slot + 1} Selected!`,
-                ephemeral: true
-            })
-        }
     }
 
     else if (commandName == "lookup") {
