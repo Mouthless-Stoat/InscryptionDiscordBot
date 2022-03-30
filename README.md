@@ -12,4 +12,4 @@ This branch contain feature that I'm working on and will get push the main branc
 ## Working on
 
 - New card coming
-- better user database
+- Better user database
