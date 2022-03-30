@@ -1,4 +1,4 @@
-# Inscryption Discord Bot Beta
+# Inscryption Discord Bot Work in Progress Stuff
 This branch contain feature that I'm working on and will get push the main branch when done
 
 ### Current Beta version: v1.1
