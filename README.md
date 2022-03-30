@@ -1,7 +1,7 @@
 # Inscryption Discord Bot Beta
 This branch contain feature that I'm working on and will get push the main branch when done
 
-### Current Beta version: v1.0
+### Current Beta version: v1.1
 
 ## Newest features
 
