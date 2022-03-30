@@ -1,7 +1,7 @@
 const { Client, Intents, MessageActionRow, MessageButton, MessageEmbed } = require("discord.js")
 const { BroadManager } = require("./fightCommandDeps/broadManager")
 const { getCardByName, getCardByPortrait, blankID, genCardEmbed, findCardInList, getCardById } = require("./fightCommandDeps/cardLib")
-const { Player, loadDeck, genDeckEmbed } = require("./fightCommandDeps/playerClass")
+const { Player, loadDeck, genDeckEmbed, deckStringToObj, objToDeckString } = require("./fightCommandDeps/playerClass")
 const fs = require("fs")
 const { Database } = require("./fightCommandDeps/database")
 
@@ -55,6 +55,7 @@ async function getReaction(message, userID, reactionList = ["👍", "👎"], del
 
 client.once("ready", () => {
     console.log("Bot Ready")
+
 })
 
 
@@ -605,7 +606,8 @@ client.on("interactionCreate", async (interaction) => {
     }
 
     else if (commandName == "deck") {
-        if (options.getSubcommand() == "see") {
+        const subCommand = options.getSubcommand()
+        if (subCommand == "see") {
             const user = options.getUser("user") ? options.getUser("user") : interaction.user
             var userExist = false
 
@@ -635,7 +637,7 @@ client.on("interactionCreate", async (interaction) => {
 
         }
 
-        else if (options.getSubcommand() == "load") {
+        else if (subCommand == "load") {
             const slot = options.getInteger("slot")
             const deckStr = options.getString("deck_string")
 
@@ -661,7 +663,7 @@ client.on("interactionCreate", async (interaction) => {
             })
         }
 
-        else if (options.getSubcommand() == "select") {
+        else if (subCommand == "select") {
             if (!serverDatabase.userExist(interaction.user.id)) {
                 await interaction.reply({
                     content: "Error ❗: This user don't have a profile yet.",
@@ -685,6 +687,124 @@ client.on("interactionCreate", async (interaction) => {
             // send user a confirm message
             await interaction.reply({
                 content: `Deck ${slot + 1} Selected!`,
+                ephemeral: true
+            })
+        }
+
+        else if (subCommand == "add_card") {
+            // if user don't have a profile yet return
+            if (!serverDatabase.userExist(interaction.user.id)) {
+                await interaction.reply({
+                    content: "Error ❗: You don't have a profile yet.",
+                    ephemeral: true
+                })
+                return
+            }
+
+            const method = options.getString("type")
+            const value = options.getString("value")
+            const amount = options.getInteger("amount")
+
+            // get user profile and data
+            const path = serverDatabase.getUserProfilePath(interaction.user.id)
+            const dataFile = fs.readFileSync(path, { encoding: 'utf8', flag: 'r' })
+            const playerData = JSON.parse(dataFile)
+
+            // get what card to user want to add base on the method
+            const cardID = method == "name" ? getCardByName(value).id : method == "portrait" ? getCardByPortrait(value).id : value
+            let deck = deckStringToObj(playerData.decks[playerData.deckIndex])
+
+            // if deck is error return
+            if (deck == "error") {
+                await interaction.reply({
+                    content: "Error ❗: An error occur while loading your deck.",
+                    ephemeral: true
+                })
+                return
+            }
+
+            // check if the card id already exist in the deck
+            if (cardID.toLowerCase() in deck) {
+                // increase the card count with the amount
+                deck[cardID.toLowerCase()] += amount
+            } else {
+                // add the card to the deck
+                deck[cardID.toLowerCase()] = amount
+            }
+
+            // transform the deck back to a deck string
+            deck = objToDeckString(deck)
+
+            // write to file
+            playerData.decks[playerData.deckIndex] = deck
+            fs.writeFileSync(path, JSON.stringify(playerData))
+
+            // send user a confirm message
+            await interaction.reply({
+                content: `${amount}x ${getCardById(cardID).name} added to your deck!`,
+                ephemeral: true
+            })
+        }
+            
+        else if (subCommand == "remove_card") {
+            // if user don't have a profile yet return
+            if (!serverDatabase.userExist(interaction.user.id)) {
+                await interaction.reply({
+                    content: "Error ❗: You don't have a profile yet.",
+                    ephemeral: true
+                })
+                return
+            }
+
+            const method = options.getString("type")
+            const value = options.getString("value")
+            const amount = options.getInteger("amount") 
+
+            // get user profile and data
+            const path = serverDatabase.getUserProfilePath(interaction.user.id)
+            const dataFile = fs.readFileSync(path, { encoding: 'utf8', flag: 'r' })
+            const playerData = JSON.parse(dataFile)
+
+            // get what card to user want to add base on the method
+            const cardID = method == "name" ? getCardByName(value).id : method == "portrait" ? getCardByPortrait(value).id : value
+            let deck = deckStringToObj(playerData.decks[playerData.deckIndex])
+
+            // if deck is error return
+            if (deck == "error") {
+                await interaction.reply({
+                    content: "Error ❗: An error occur while loading your deck.",
+                    ephemeral: true
+                })
+                return
+            }
+
+            // check if the card id already exist in the deck
+            if (cardID.toLowerCase() in deck) {
+                // increase the card count with the amount
+                deck[cardID.toLowerCase()] -= amount
+
+                //if that number got into negative remove the card
+                if (deck[cardID.toLowerCase()] <= 0) {
+                    delete deck[cardID.toLowerCase()]
+                }
+            } else {
+                // tell the user that the card is not in the deck
+                await interaction.reply({
+                    content: `${getCardById(cardID).name} is not in the deck!`,
+                    ephemeral: true
+                })
+            }
+
+            // transform the deck back to a deck string
+            deck = objToDeckString(deck)
+
+            // write to file
+            playerData.decks[playerData.deckIndex] = deck
+            fs.writeFileSync(path, JSON.stringify(playerData))
+
+            // send user a confirm message
+            await interaction.reply({
+                content: `${amount}x ${getCardById(cardID).name} removed from your deck!`,
                 ephemeral: true
             })
         }

@@ -1,4 +1,4 @@
-const { getCardById, getCardByName, genCardEmbed } = require("./cardLib")
+const { getCardById } = require("./cardLib")
 
 class Player {
     constructor (user, deck = []) {
@@ -27,12 +27,39 @@ class Player {
     }
 }
 
+function deckStringToObj(deckString) {
+    let deck = loadDeck(deckString)
+    if (deck == "error") {
+        return "error"
+    }
+
+    let out = {}
+    deck.forEach(card => {
+        const cardId = card.id.toLowerCase()
+        if (out[cardId] == undefined) {
+            out[cardId] = 1
+        } else {
+            out[cardId] += 1
+        }
+    })
+    return out
+}
+
 function loadDeck(deckString = "") {
+    // if deckString is empty, return an empty deck
+    if (deckString == "") {
+        return []
+    }
+
     try {
         let temp = deckString.split("/")
         let out = []
 
-        for (const i in temp) {
+        for (const i of temp) {
+            if (i == "") {
+                continue
+            }
+
             // get the card id and count
             const count = parseInt(i.substring(0, 2))
             const id = i.substring(2, i.length)
@@ -54,7 +81,7 @@ function loadDeck(deckString = "") {
         if (out.length > 30) {
             return "error"
         }
-        
+
         return out
     } catch {
         return "error"
@@ -67,12 +94,11 @@ function objToDeckString(obj = {}) {
     let sortedObj = Object.entries(obj).sort((a, b) => a[0] - b[0])
 
     for (const lst of sortedObj) {
-        console.log(lst)
         const count = parseInt(lst[1])
         const id = lst[0]
 
         if (count < 10) deckString += `0${count}${id}/`
-        else deckString += `${count}${id}`
+        else deckString += `${count}${id}/`
 
     }
     return deckString
@@ -152,9 +178,11 @@ function genDeckEmbed(deckStr, user) {
     return embed
 }
 
+
 module.exports = {
     Player,
     loadDeck,
     objToDeckString,
+    deckStringToObj,
     genDeckEmbed
 }
