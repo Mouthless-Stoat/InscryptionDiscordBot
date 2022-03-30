@@ -35,7 +35,8 @@ const testCommands = [
                         ])
                         .setRequired(true)
                 )
-    )
+        )
+
         .addSubcommand(sub =>
             sub.setName("select")
                 .setDescription("Select What deck you want to use")
@@ -47,6 +48,59 @@ const testCommands = [
                             ["Slot 2", 1],
                             ["Slot 3", 2]
                         ])
+                        .setRequired(true)
+                )
+        )
+
+        .addSubcommand(sub =>
+            sub.setName("add_card")
+                .setDescription("Add cards to your selected deck")
+                .addStringOption(option =>
+                    option.setName("type")
+                        .setDescription("Method type you want to use")
+                        .addChoices([
+                            ["ID", "id"],
+                            ["Name", "name"],
+                            ["Portrait", "portrait"]
+                        ])
+                        .setRequired(true)
+                )
+
+                .addStringOption(option =>
+                    option.setName("value")
+                        .setDescription("The value to the method you used")
+                        .setRequired(true)
+                )
+
+                .addIntegerOption(option =>
+                    option.setName("amount")
+                        .setDescription("The amount of cards you want to add")
+                        .setRequired(true)
+                )
+        )
+        .addSubcommand(sub =>
+            sub.setName("remove_card")
+                .setDescription("Remove cards to your selected deck")
+                .addStringOption(option =>
+                    option.setName("type")
+                        .setDescription("Method type you want to use")
+                        .addChoices([
+                            ["ID", "id"],
+                            ["Name", "name"],
+                            ["Portrait", "portrait"]
+                        ])
+                        .setRequired(true)
+                )
+
+                .addStringOption(option =>
+                    option.setName("value")
+                        .setDescription("The value to the method you used")
+                        .setRequired(true)
+                )
+
+                .addIntegerOption(option =>
+                    option.setName("amount")
+                        .setDescription("The amount of cards you want to remove")
                         .setRequired(true)
                 )
         )
