@@ -19,11 +19,13 @@ Well you can of course make decks and fight people with it. That basically it to
 
 So Inscryption is a card game kinda like Magic the Gathering. It play on a 4x2 broad and in the bot it displayed like this
 
-
+![unknown](https://user-images.githubusercontent.com/89868169/161122737-9e88ac9a-7718-4f7c-afe6-dd6b74af4e96.png)
 
 the broad doesn't flip base on which side you on but I'm too lazy to do that. So if you are player 1 then the bottom row is your side and if you are player 2 then the top row is your side.
 
-Ok now we done with the broad now let get start on how you can play card. Each card have a cost
+Ok now we done with the broad now let get start on how you can play card. Each card have a cost it can be either blood or bone. Let talk about blood first shall we. To summon a blood card it require sacrifice from other card so if you want to play a 2 blood cost card you must sacrifice 2 of your own card. Sacrificing will kill the card leaving a blank space. 
+
+For bone cost you must use the bone token provided whenever a card die it produce 1 bone token.
 
 ## Changelog
 
