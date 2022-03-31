@@ -3,7 +3,27 @@ A simple Discord Bot that I'm working on
 
 Server to test the bot: https://discord.gg/Qqkm8D7UsD (Perma link)
 
-Ik that this don't give much info but when the bot done I gonna update this.
+## About
+
+So what is this project? It simply a discord bot that I'm working on, that try to mimic the game [Inscryption](https://store.steampowered.com/app/1092790/Inscryption/) but with multiplayer using [discord.js](https://discord.js.org/#/docs/discord.js/stable/general/welcome).
+
+If you don't know what Inscryption is and somehow stumble into this repo I'm very surprise. But if you interested to play I do have [a how to play](#how-to-play-inscryption) down below
+
+The bot isn't finished yet, but it's usable if you want to test/play with it join the [discord server](https://discord.gg/Qqkm8D7UsD). Why must you join the server and can't invite it to your owns server? Because I'm working on it and I need to see if there any bug and how the bug get produced so I can fix them.
+
+## What can it do?
+
+Well you can of course make decks and fight people with it. That basically it to be honest. If you want any feature just tell me or make an issue and I will try to add them.
+
+## How to play Inscryption?
+
+So Inscryption is a card game kinda like Magic the Gathering. It play on a 4x2 broad and in the bot it displayed like this
+
+
+
+the broad doesn't flip base on which side you on but I'm too lazy to do that. So if you are player 1 then the bottom row is your side and if you are player 2 then the top row is your side.
+
+Ok now we done with the broad now let get start on how you can play card. Each card have a cost
 
 ## Changelog
 
@@ -62,16 +82,16 @@ New ID system use the card name and stat instead of where the card get define in
 
 ## v0.5
 
-This week were tired af cus of alot of project due but here a devlog. I will be on march break so i willl have more time to work (yayyy :D)
+This week were tired af cus of alot of project due but here a devlog. I will be on march break so I willl have more time to work (yayyy :D)
 
 #### New stuff
 
 - Now you can load in deck with a deck string that can be generated.
-- You can now build deck. By running a command and entering what card ID you want to add. Although it a lil slow cus the code not taht optimize cus im a dumbass. Maybe i will improve it if i know how ofc.
+- You can now build deck. By running a command and entering what card ID you want to add. Although it a lil slow cus the code not taht optimize cus im a dumbass. Maybe I will improve it if I know how ofc.
 - Come with this deck building using ID ofc a command to see card by ID and ID now get shown on the card lookup embed.
 - Added way to view your own as well as other ppl deck.
 
-I will do some play test this weekend aka tmr if no bug is found i could prob do some polish and release for public beta or something, let hope that the case.
+I will do some play test this weekend aka tmr if no bug is found I could prob do some polish and release for public beta or something, let hope that the case.
 
 ## v0.4
 

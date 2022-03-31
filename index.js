@@ -183,7 +183,7 @@ client.on("interactionCreate", async (interaction) => {
             `${interaction.user.tag.replace("#", " ")} Fight`,
             {
                 type: "GUILD_TEXT",
-                parent: category.id,
+                parent: "944698628113592320",
                 permissionOverwrites: [
                     {
                         id: interaction.guild.roles.everyone,
@@ -745,7 +745,7 @@ client.on("interactionCreate", async (interaction) => {
                 ephemeral: true
             })
         }
-            
+
         else if (subCommand == "remove_card") {
             // if user don't have a profile yet return
             if (!serverDatabase.userExist(interaction.user.id)) {
@@ -758,7 +758,7 @@ client.on("interactionCreate", async (interaction) => {
 
             const method = options.getString("type")
             const value = options.getString("value")
-            const amount = options.getInteger("amount") 
+            const amount = options.getInteger("amount")
 
             // get user profile and data
             const path = serverDatabase.getUserProfilePath(interaction.user.id)
