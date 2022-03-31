@@ -118,13 +118,13 @@ client.on("interactionCreate", async (interaction) => {
 
         let tempFile
         try {
-            tempFile = fs.readFileSync(`./database/${interaction.user.id}.json`, { encoding: 'utf8', flag: 'r' })
+            tempFile = fs.readFileSync(`./database/player/${interaction.user.id}.json`, { encoding: 'utf8', flag: 'r' })
         } catch {
             interaction.editReply(`<@${interaction.user.id}> Don't yet have a profile you need one to battle`)
             return
         }
 
-        const p1File = `./database/${interaction.user.id}.json`
+        const p1File = `./database/player/${interaction.user.id}.json`
         const p1Json = JSON.parse(tempFile)
 
         let tempDeck = loadDeck(p1Json.decks[p1Json.deckIndex])
@@ -141,13 +141,13 @@ client.on("interactionCreate", async (interaction) => {
         //p2
 
         try {
-            tempFile = fs.readFileSync(`./database/${p2User.id}.json`, { encoding: 'utf8', flag: 'r' })
+            tempFile = fs.readFileSync(`./database/player/${p2User.id}.json`, { encoding: 'utf8', flag: 'r' })
         } catch {
             interaction.editReply(`<@${p2User.id}> Don't yet have a profile you need one to battle`)
             return
         }
 
-        const p2File = `./database/${p2User.id}.json`
+        const p2File = `./database/player/${p2User.id}.json`
         const p2Json = JSON.parse(tempFile)
 
         tempDeck = loadDeck(p2Json.decks[p2Json.deckIndex])
