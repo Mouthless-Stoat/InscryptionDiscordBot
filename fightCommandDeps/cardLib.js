@@ -3,7 +3,7 @@ const fs = require("fs")
 
 let cardPool = []
 let sigilPool = []
-const blankID = 0
+const blankID = "blank"
 
 class Sigil {
     constructor (type = "", name = "", description = "", onActivate = (
@@ -396,10 +396,10 @@ function getCardByPortrait(portrait = "") {
     return out
 }
 
-function getCardById(id = 0) {
+function getCardById(id = "") {
     let out = "error"
     cardPool.forEach((card) => {
-        if (card.id.toLowerCase() == id.toLocaleLowerCase()) {
+        if (card.id.toLowerCase() == id) {
             out = new Card(
                 {
                     name: card.name,
@@ -460,7 +460,7 @@ const blank = () => {
     return new Card({
         name: "",
         portrait: "🔳",
-        id: 0
+        id: "blank"
     })
 }
 
