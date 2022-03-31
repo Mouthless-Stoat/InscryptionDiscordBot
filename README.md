@@ -16,7 +16,6 @@ Ik that this don't give much info but when the bot done I gonna update this.
 - [v1.0](#v10)
 - [v1.1](#v11)
 
-<<<<<<< HEAD
 ---
 
 ## v1.1
@@ -120,7 +119,3 @@ I will do some play test this weekend aka tmr if no bug is found i could prob do
 
 ## v0.1
 - First release
-=======
-- New card coming
-- Better user database
->>>>>>> wip
