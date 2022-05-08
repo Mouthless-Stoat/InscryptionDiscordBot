@@ -1,8 +1,6 @@
 # Inscryption Discord Bot
 A simple Discord Bot that I'm working on
 
-Server to test the bot: https://discord.gg/Qqkm8D7UsD (Perma link)
-
 ## About
 
 So what is this project? It simply a discord bot that I'm working on, that try to mimic the game [Inscryption](https://store.steampowered.com/app/1092790/Inscryption/) but with multiplayer using [discord.js](https://discord.js.org/#/docs/discord.js/stable/general/welcome).
