@@ -58,7 +58,7 @@ Do keep in mind that your deck can't go over 30 cards. So if you do it will say 
 
 ## v1.0
 
-The bot is now for beta testing if you want to checkout the bot the invite link to the bot server is here: https://discord.gg/Qqkm8D7UsD
+The bot is now for beta testing if you want to checkout the bot the invite link to the bot server is here
 
 ### New Card:
 - The Scale (⚖): 5/2, 3 blood, with Scale Fate if it die you die
