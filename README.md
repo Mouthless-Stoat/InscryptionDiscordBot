@@ -1,5 +1,8 @@
+> [!WARNING]
+> DOES NOT WORK ANYMORE
+
 # Inscryption Discord Bot
-A simple Discord Bot that I'm working on
+A simple Discord Bot that I'm not working on.
 
 ## About
 
